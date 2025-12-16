@@ -14,8 +14,8 @@ public class UserMapper implements Mapper<UserEditDTO, User> {
     public User map(UserEditDTO from) {
         return User.builder()
                 .id(from.getId())
-                .firstName(from.getFirstname())
-                .lastName(from.getLastname())
+                .firstname(from.getFirstname())
+                .lastname(from.getLastname())
                 .bio(from.getBio())
                 .avatar(from.getImageURL())
                 .build();
@@ -23,8 +23,8 @@ public class UserMapper implements Mapper<UserEditDTO, User> {
 
     public User map(UserEditDTO from, User to){
         to.setBio(Optional.ofNullable(from.getBio()).orElse(to.getBio()));
-        to.setFirstName(Optional.ofNullable(from.getFirstname()).orElse(to.getFirstName()));
-        to.setLastName(Optional.ofNullable(from.getLastname()).orElse(to.getLastName()));
+        to.setFirstname(Optional.ofNullable(from.getFirstname()).orElse(to.getFirstname()));
+        to.setLastname(Optional.ofNullable(from.getLastname()).orElse(to.getLastname()));
 
         return to;
     }

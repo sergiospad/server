@@ -18,9 +18,10 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS comment
 (
     id BIGSERIAL PRIMARY KEY,
-    user_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL REFERENCES users,
     message TEXT NOT NULL,
-    created_date DATE
+    created_date DATE,
+    post_id BIGINT NOT NULL REFERENCES post ON DELETE CASCADE
 );
 
 --changeset kane:3

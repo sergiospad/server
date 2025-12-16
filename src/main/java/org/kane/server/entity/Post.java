@@ -14,8 +14,8 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"comments", "user"})
-@EqualsAndHashCode(of = {"id", "title", "caption"})
+@ToString(of = {"id", "title", "caption", "location", "createdDate"})
+@EqualsAndHashCode(of = {"id", "title", "caption", "location", "createdDate"})
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +25,11 @@ public class Post {
     private String caption;
     private String location;
 
-    @Column
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private Set<Long> likedUsers = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<User> likedUsers = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
-
 
     @OneToMany(
             cascade = CascadeType.REFRESH,
@@ -51,12 +48,12 @@ public class Post {
         this.createdDate = LocalDateTime.now();
     }
 
-    public void addLikedUser(Long id){
-        likedUsers.add(id);
+    public void addLikedUser(User user){
+        likedUsers.add(user);
     }
 
-    public void removeLikedUser(Long id){
-        likedUsers.remove(id);
+    public void removeLikedUser(User user){
+        likedUsers.remove(user);
     }
 
     @OneToMany(
@@ -67,5 +64,14 @@ public class Post {
     )
     @Builder.Default
     private List<ImageModel> images = new ArrayList<>();
+
+    public void addImage(ImageModel imageModel){
+        images.add(imageModel);
+        imageModel.setPost(this);
+    }
+
+    public void removeImage(ImageModel imageModel){
+        images.remove(imageModel);
+    }
 
 }

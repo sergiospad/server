@@ -33,8 +33,8 @@ public class UserService {
     @Transactional
     public User createUser(SignupRequest userIn){
         var user = User.builder()
-                .firstName(userIn.getFirstname())
-                .lastName(userIn.getLastname())
+                .firstname(userIn.getFirstname())
+                .lastname(userIn.getLastname())
                 .email(userIn.getEmail())
                 .username(userIn.getUsername())
                 .password(bCryptPasswordEncoder.encode(userIn.getPassword()))
@@ -50,12 +50,12 @@ public class UserService {
 
     @Transactional
     public Optional<User> updateUser(UserEditDTO userDTO, Principal principal){
-        return userRepository.getUserByPrincipal(principal)
+        return Optional.of(userRepository.getUserByPrincipal(principal))
                 .map(u->userMapper.map(userDTO, u))
                 .map(userRepository::save);
     }
 
-    public Optional<User> getCurrentUser(Principal principal){
+    public User getCurrentUser(Principal principal){
         return userRepository.getUserByPrincipal(principal);
     }
 
@@ -65,8 +65,7 @@ public class UserService {
 
     @Transactional
     public void uploadAvatar(MultipartFile file, Principal principal, ImagePrefix imagePrefix) {
-        User user = userRepository.getUserByPrincipal(principal)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userRepository.getUserByPrincipal(principal);
 
         if (!ObjectUtils.isEmpty(user.getAvatar()))
             delete(user.getAvatar(),

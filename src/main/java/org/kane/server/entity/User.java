@@ -13,8 +13,8 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"posts"})
-@EqualsAndHashCode(exclude = {"posts"})
+@ToString(of = {"id", "username", "firstname", "bio", "password", "email", "createdDate"})
+@EqualsAndHashCode(of = {"id", "username", "firstname", "bio", "password", "email", "createdDate"})
 @Builder
 public class User {
     @Id
@@ -24,8 +24,8 @@ public class User {
     @Column(updatable = false)
     private String username;
 
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
 
     @Column(updatable = false)
     private String email;
@@ -50,5 +50,14 @@ public class User {
     @PrePersist
     private void onCreate(){
         this.createdDate = LocalDateTime.now();
+    }
+
+    public void addPost(Post post){
+        this.posts.add(post);
+        post.setUser(this);
+    }
+
+    public void removePost(Post post){
+        this.posts.remove(post);
     }
 }

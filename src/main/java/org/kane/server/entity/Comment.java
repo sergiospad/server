@@ -20,7 +20,6 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER)
     private Post post;
 
-
     @OneToOne
     @JoinColumn(name = "user_id")
     private User commentator;

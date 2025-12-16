@@ -1,0 +1,53 @@
+package org.kane.server.services;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.kane.server.DTO.CommentCreateDTO;
+import org.kane.server.DTO.CommentShowDTO;
+import org.kane.server.entity.Comment;
+import org.kane.server.entity.Post;
+import org.kane.server.entity.User;
+import org.kane.server.exceptions.PostNotFoundException;
+import org.kane.server.mappers.CommentShowMapper;
+import org.kane.server.repository.CommentRepository;
+import org.kane.server.repository.PostRepository;
+import org.kane.server.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.security.Principal;
+import java.util.Optional;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class CommentService {
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final CommentShowMapper commentShowMapper;
+
+    @Transactional
+    public CommentShowDTO saveComment(CommentCreateDTO commentDTO, Principal principal) {
+        User user = userRepository.getUserByPrincipal(principal);
+        Post post = postRepository.findById(commentDTO.getPostId())
+                .orElseThrow(()->new PostNotFoundException("Post not found for username %s".formatted(user.getUsername())));
+        var comment = Comment.builder()
+                .post(post)
+                .commentator(user)
+                .message(commentDTO.getMessage())
+                .build();
+
+        log.info("Saving comment for Post {}", post.getId());
+        return Optional.of(commentRepository.save(comment)).map(commentShowMapper::map).orElse(null);
+    }
+
+    public Optional<CommentShowDTO> getCommentFromId(Long commentId) {
+        return commentRepository.findById(commentId).map(commentShowMapper::map);
+    }
+
+    public void deleteCommentFromId(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
+}
