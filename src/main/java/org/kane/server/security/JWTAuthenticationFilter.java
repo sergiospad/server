@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kane.server.services.CustomUserDetailsService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,7 @@ import static org.kane.server.security.SecurityConstants.TOKEN_PREFIX;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JWTAuthentificationFilter extends OncePerRequestFilter {
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JWTTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
 
