@@ -25,7 +25,11 @@ public class Post {
     private String caption;
     private String location;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "likes_post",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @Builder.Default
     private Set<User> likedUsers = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -1,8 +1,9 @@
-package org.kane.server.mappers;
+package org.kane.server.mappers.user;
 
 import lombok.RequiredArgsConstructor;
-import org.kane.server.DTO.UserEditDTO;
+import org.kane.server.DTO.user.UserEditDTO;
 import org.kane.server.entity.User;
+import org.kane.server.mappers.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

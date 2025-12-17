@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -45,6 +47,14 @@ public class CommentService {
 
     public Optional<CommentShowDTO> getCommentFromId(Long commentId) {
         return commentRepository.findById(commentId).map(commentShowMapper::map);
+    }
+
+    public List<CommentShowDTO> getCommentsFromPostId(Long postId) {
+        var post = postRepository.findById(postId)
+                .orElseThrow(()->new PostNotFoundException("Post not found id: %d".formatted(postId)));
+        return commentRepository.findAllByPost(post).stream()
+                .map(commentShowMapper::map)
+                .toList();
     }
 
     public void deleteCommentFromId(Long commentId) {

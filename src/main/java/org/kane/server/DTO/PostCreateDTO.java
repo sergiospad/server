@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostCreateDTO {
-    private Long id;
     private String title;
     private String caption;
     private String location;

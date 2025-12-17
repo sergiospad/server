@@ -2,12 +2,11 @@ package org.kane.server.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kane.server.DTO.UserEditDTO;
+import org.kane.server.DTO.user.UserEditDTO;
 import org.kane.server.DTO.request.SignupRequest;
 import org.kane.server.entity.User;
 import org.kane.server.exceptions.UserExistException;
-import org.kane.server.exceptions.UserNotFoundException;
-import org.kane.server.mappers.UserMapper;
+import org.kane.server.mappers.user.UserMapper;
 import org.kane.server.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -74,6 +73,10 @@ public class UserService {
         var imgPath = saveImage(file, user.getId(), imagePrefix.toString());
         user.setAvatar(imgPath);
         userRepository.save(user);
+    }
+
+    public Optional<String> getAvatar(Principal principal){
+        return Optional.of(userRepository.getUserByPrincipal(principal).getAvatar());
     }
 
 }

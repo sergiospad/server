@@ -1,12 +1,17 @@
 package org.kane.server.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kane.server.DTO.UserEditDTO;
-import org.kane.server.DTO.UserShowNameDTO;
-import org.kane.server.mappers.UserMapper;
-import org.kane.server.mappers.UserShowNameMapper;
+import org.kane.server.DTO.user.UserEditDTO;
+import org.kane.server.DTO.user.UserProfileDTO;
+import org.kane.server.DTO.user.UserShowNameDTO;
+import org.kane.server.mappers.user.UserMapper;
+import org.kane.server.mappers.user.UserProfileMapper;
+import org.kane.server.mappers.user.UserShowNameMapper;
+import org.kane.server.services.ImageUploadService;
+import org.kane.server.services.PostService;
 import org.kane.server.services.UserService;
 import org.kane.server.validations.annotations.ResponseErrorValidation;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.ObjectUtils;
@@ -14,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,12 +28,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
+    private final PostService postService;
 
     private final UserShowNameMapper userShowNameMapper;
+    private final UserProfileMapper userProfileMapper;
     private final UserMapper userMapper;
     private final ResponseErrorValidation responseErrorValidation;
-
 
     @GetMapping()
     public ResponseEntity<UserShowNameDTO> getCurrentUser(Principal principal) {
@@ -48,4 +54,31 @@ public class UserController {
                 .orElseThrow(()->new UsernameNotFoundException("User not found"));
         return ResponseEntity.ok(userUpd);
     }
+
+    @PostMapping("/profile")
+    public ResponseEntity<UserProfileDTO> getCurrentUserProfile(Principal principal){
+        var user = Optional.of(userService.getCurrentUser(principal))
+                .map(userProfileMapper::map)
+                .orElseThrow(()->new UsernameNotFoundException("User not found"));
+        return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/like/{postId}")
+    public ResponseEntity<List<Long>> likePost(@PathVariable Long postId,
+                                               Principal principal) {
+        var user = userService.getCurrentUser(principal);
+        var postDTO = postService.likePost(postId, user.getId());
+        return ResponseEntity.ok(postDTO);
+    }
+
+    @GetMapping("/image")
+    public ResponseEntity<byte[]> getUserImage(Principal principal){
+        return userService.getAvatar(principal)
+                .flatMap(ImageUploadService::get)
+                .map(img  -> ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_PNG)
+                        .body(img))
+                .orElse(ResponseEntity.ok(null));
+    }
+
 }

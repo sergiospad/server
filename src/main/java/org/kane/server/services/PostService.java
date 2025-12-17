@@ -49,7 +49,7 @@ public class PostService {
     }
 
     public List<Long> getAllPosts(){
-        return postRepository.findAllByOrderByCreatedDateDesc();
+        return postRepository.findAllIdPosts();
     }
 
     public Optional<PostShowDTO> getPostById(Long id){
@@ -58,7 +58,7 @@ public class PostService {
 
     public List<Long> getPostsByCurrentUser(Principal principal){
         var user = userRepository.getUserByPrincipal(principal);
-        return postRepository.findAllIdByUserOrderByCreatedDateDesc(user);
+        return postRepository.findAllByUser(user.getId());
     }
 
     @Transactional
@@ -111,5 +111,9 @@ public class PostService {
         Post post =  postRepository.findById(postId)
                 .orElseThrow(()->new PostNotFoundException("Post cannot be found"));
         return imageRepository.findAllIdByPost(post);
+    }
+
+    public Optional<ImageModel> getImageOfPost(Long postId){
+        return imageRepository.findById(postId);
     }
 }

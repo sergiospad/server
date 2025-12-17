@@ -1,4 +1,4 @@
-package org.kane.server.DTO;
+package org.kane.server.DTO.user;
 
 import lombok.Builder;
 import lombok.Data;

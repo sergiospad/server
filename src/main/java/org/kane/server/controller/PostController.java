@@ -1,0 +1,80 @@
+package org.kane.server.controller;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.kane.server.DTO.PostCreateDTO;
+import org.kane.server.DTO.PostShowDTO;
+import org.kane.server.DTO.response.MessageResponse;
+import org.kane.server.exceptions.PostNotFoundException;
+import org.kane.server.mappers.PostShowMapper;
+import org.kane.server.services.PostService;
+import org.kane.server.services.UserService;
+import org.kane.server.validations.annotations.ResponseErrorValidation;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("api/post")
+@CrossOrigin
+@RequiredArgsConstructor
+public class PostController {
+
+    private final PostService postService;
+    private final UserService userService;
+
+    private final ResponseErrorValidation responseErrorValidation;
+    private final PostShowMapper postShowMapper;
+
+
+    @PostMapping("/create")
+    public ResponseEntity<Object> createPost(@Valid @RequestBody PostCreateDTO postDTO,
+                                             BindingResult bindingResult,
+                                             Principal principal) {
+        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
+        if(!ObjectUtils.isEmpty(errors)) return errors;
+
+        var res = Optional.of(postService.createPost(postDTO, principal))
+                .orElseThrow(()->new PostNotFoundException("Post already exists"));
+
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Long>> getAllPosts(Principal principal) {
+        var posts = postService.getAllPosts();
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<Long>> getUserPosts(Principal principal) {
+        var posts = postService.getPostsByCurrentUser(principal);
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/image/{imageId}")
+    public ResponseEntity<byte[]> getUserImage(Long imageId, Principal principal){
+        return imageUploadService.getImageToUser(principal)
+                .map(ImageModel::getImage)
+                .flatMap(imageUploadService::get)
+                .map(img  -> ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_PNG)
+                        .body(img))
+                .orElse(ResponseEntity.ok(null));
+    }
+
+    @DeleteMapping("/delete/{postId}")
+    public ResponseEntity<MessageResponse> deletePost(@PathVariable Long postId, Principal principal) {
+        postService.deletePost(postId, principal);
+        return ResponseEntity.ok(new MessageResponse("Post deleted"));
+    }
+
+
+}
