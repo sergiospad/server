@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.kane.server.DTO.PostCreateDTO;
 import org.kane.server.DTO.PostShowDTO;
 import org.kane.server.DTO.response.MessageResponse;
+import org.kane.server.entity.ImageModel;
 import org.kane.server.exceptions.PostNotFoundException;
 import org.kane.server.mappers.PostShowMapper;
+import org.kane.server.services.ImageUploadService;
 import org.kane.server.services.PostService;
 import org.kane.server.services.UserService;
 import org.kane.server.validations.annotations.ResponseErrorValidation;
@@ -16,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -60,14 +63,22 @@ public class PostController {
     }
 
     @GetMapping("/image/{imageId}")
-    public ResponseEntity<byte[]> getUserImage(Long imageId, Principal principal){
-        return imageUploadService.getImageToUser(principal)
-                .map(ImageModel::getImage)
-                .flatMap(imageUploadService::get)
+    public ResponseEntity<byte[]> getUserImage(@PathVariable Long imageId, Principal principal ){
+        return postService.getImageOfPost(imageId)
+                .map(ImageModel::getImageURL)
+                .flatMap(ImageUploadService::get)
                 .map(img  -> ResponseEntity.ok()
                         .contentType(MediaType.IMAGE_PNG)
                         .body(img))
                 .orElse(ResponseEntity.ok(null));
+    }
+
+    @PostMapping("/image/{postId}")
+    public ResponseEntity<Long> uploadImage(@PathVariable Long postId,
+                                                  @RequestParam MultipartFile file,
+                                                  Principal principal){
+        var id = postService.uploadImage(file, principal, postId);
+        return ResponseEntity.ok(id);
     }
 
     @DeleteMapping("/delete/{postId}")
@@ -75,6 +86,8 @@ public class PostController {
         postService.deletePost(postId, principal);
         return ResponseEntity.ok(new MessageResponse("Post deleted"));
     }
+
+
 
 
 }

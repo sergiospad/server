@@ -63,14 +63,14 @@ public class UserService {
     }
 
     @Transactional
-    public void uploadAvatar(MultipartFile file, Principal principal, ImagePrefix imagePrefix) {
+    public void uploadAvatar(MultipartFile file, Principal principal) {
         User user = userRepository.getUserByPrincipal(principal);
-
+        var pref = ImagePrefix.USER.toString();
         if (!ObjectUtils.isEmpty(user.getAvatar()))
             delete(user.getAvatar(),
                     user.getId(),
-                    imagePrefix.toString());
-        var imgPath = saveImage(file, user.getId(), imagePrefix.toString());
+                   pref);
+        var imgPath = saveImage(file, user.getId(), pref);
         user.setAvatar(imgPath);
         userRepository.save(user);
     }

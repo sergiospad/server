@@ -62,7 +62,7 @@ public class Post {
 
     @OneToMany(
             cascade = CascadeType.REFRESH, //ALL
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             mappedBy = "post",
             orphanRemoval = true
     )

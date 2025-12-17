@@ -1,6 +1,7 @@
 package org.kane.server.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.kane.server.DTO.response.MessageResponse;
 import org.kane.server.DTO.user.UserEditDTO;
 import org.kane.server.DTO.user.UserProfileDTO;
 import org.kane.server.DTO.user.UserShowNameDTO;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -79,6 +81,13 @@ public class UserController {
                         .contentType(MediaType.IMAGE_PNG)
                         .body(img))
                 .orElse(ResponseEntity.ok(null));
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<MessageResponse> uploadImageToUser(@RequestParam MultipartFile file,
+                                                             Principal principal) {
+        userService.uploadAvatar(file, principal);
+        return ResponseEntity.ok(new  MessageResponse("Image uploaded successfully"));
     }
 
 }

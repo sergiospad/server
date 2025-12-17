@@ -94,7 +94,7 @@ public class PostService {
     }
 
     @Transactional
-    public ImageModel uploadImage(MultipartFile file, Principal principal, Long postId){
+    public Long uploadImage(MultipartFile file, Principal principal, Long postId){
 
         Post post =postRepository.findById(postId)
                 .orElseThrow(()->new PostNotFoundException("Post cannot be found id: %d".formatted(postId)));;
@@ -104,7 +104,8 @@ public class PostService {
                 .build();
         imageModel = imageRepository.save(imageModel);
         post.addImage(imageModel);
-        return imageModel;
+
+        return imageModel.getId();
     }
 
     public  List<Long> getIdOfImages(Long postId){
