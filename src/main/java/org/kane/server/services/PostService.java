@@ -49,7 +49,7 @@ public class PostService {
     }
 
     public List<Long> getAllPosts(){
-        return postRepository.findAllIdOrderByCreatedDateDesc();
+        return postRepository.findAllByOrderByCreatedDateDesc();
     }
 
     public Optional<PostShowDTO> getPostById(Long id){

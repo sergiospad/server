@@ -5,7 +5,7 @@ logging:
 
 spring:
   liquibase:
-    clear-checksums: true
+    clear-checksums: false
   application:
     name: telescope
   datasource:
