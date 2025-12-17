@@ -13,7 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommentShowDTO {
     Long id;
-    Long commentatorId;
+    String username;
+    String lastname;
+    String firstname;
     String message;
     LocalDateTime creationDate;
 }

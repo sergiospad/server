@@ -12,7 +12,9 @@ public class CommentShowMapper implements Mapper<Comment, CommentShowDTO>{
     public CommentShowDTO map(Comment from) {
         return CommentShowDTO.builder()
                 .id(from.getId())
-                .commentatorId(from.getCommentator().getId())
+                .username(from.getCommentator().getUsername())
+                .lastname(from.getCommentator().getLastname())
+                .firstname(from.getCommentator().getFirstname())
                 .creationDate(from.getCreatedDate())
                 .message(from.getMessage())
                 .build();

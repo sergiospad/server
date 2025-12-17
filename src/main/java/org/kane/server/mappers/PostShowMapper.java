@@ -19,9 +19,6 @@ public class PostShowMapper implements Mapper<Post, PostShowDTO>{
         var likedUsers = from.getLikedUsers().stream()
                 .map(User::getId)
                 .toList();
-        var comments = from.getComments().stream()
-                .map(Comment::getId)
-                .toList();
         return PostShowDTO.builder()
                 .id(from.getId())
                 .title(from.getTitle())
@@ -30,7 +27,6 @@ public class PostShowMapper implements Mapper<Post, PostShowDTO>{
                 .author(from.getUser().getId())
                 .createdDate(from.getCreatedDate())
                 .likedUsers(likedUsers)
-                .comments(comments)
                 .images(img)
                 .build();
     }

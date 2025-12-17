@@ -21,5 +21,4 @@ public class PostShowDTO {
     LocalDateTime createdDate;
     List<Long> images;
     List<Long> likedUsers;
-    List<Long> comments;
 }

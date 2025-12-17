@@ -87,7 +87,4 @@ public class PostController {
         return ResponseEntity.ok(new MessageResponse("Post deleted"));
     }
 
-
-
-
 }

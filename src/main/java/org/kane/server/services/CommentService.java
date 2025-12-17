@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -57,7 +56,10 @@ public class CommentService {
                 .toList();
     }
 
-    public void deleteCommentFromId(Long commentId) {
-        commentRepository.deleteById(commentId);
+    @Transactional
+    public void deleteComment(Long commentId){
+        commentRepository.findById(commentId)
+                .ifPresent(commentRepository::delete);
+
     }
 }
