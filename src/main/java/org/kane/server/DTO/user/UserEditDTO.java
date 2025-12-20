@@ -10,5 +10,4 @@ public class UserEditDTO {
     private String firstname;
     private String lastname;
     private String bio;
-    private String imageURL;
 }

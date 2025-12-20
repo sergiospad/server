@@ -32,9 +32,10 @@ public class User {
 
     private String bio;
     private String password;
+    @Column(updatable = true)
     private String avatar;
 
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     @Column(updatable = false)
     private LocalDateTime createdDate;
 

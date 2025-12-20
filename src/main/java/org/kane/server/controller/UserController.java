@@ -37,7 +37,7 @@ public class UserController {
     private final UserMapper userMapper;
     private final ResponseErrorValidation responseErrorValidation;
 
-    @GetMapping()
+    @GetMapping("/")
     public ResponseEntity<UserShowNameDTO> getCurrentUser(Principal principal) {
         var userDTO = Optional.of(userService.getCurrentUser(principal))
                 .map(userShowNameMapper::map)
@@ -57,7 +57,7 @@ public class UserController {
         return ResponseEntity.ok(userUpd);
     }
 
-    @PostMapping("/profile")
+    @GetMapping("/profile")
     public ResponseEntity<UserProfileDTO> getCurrentUserProfile(Principal principal){
         var user = Optional.of(userService.getCurrentUser(principal))
                 .map(userProfileMapper::map)
@@ -65,7 +65,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/like/{postId}")
+    @GetMapping("/like/{postId}")
     public ResponseEntity<List<Long>> likePost(@PathVariable Long postId,
                                                Principal principal) {
         var user = userService.getCurrentUser(principal);
@@ -75,7 +75,19 @@ public class UserController {
 
     @GetMapping("/image")
     public ResponseEntity<byte[]> getUserImage(Principal principal){
-        return userService.getAvatar(principal)
+        var avatar = Optional.ofNullable(userService.getCurrentUser(principal).getAvatar())
+                .orElse(userService.getDefaultAvatar());
+       return processAvatar(avatar);
+    }
+    @GetMapping("/image/{userId}")
+    public ResponseEntity<byte[]> getAvatarByUserId(@PathVariable Long userId){
+        var avatar = userService.getAvatarByUserId(userId)
+                .orElse(userService.getDefaultAvatar());
+        return processAvatar(avatar);
+    }
+
+    public ResponseEntity<byte[]> processAvatar(String avatar){
+        return Optional.of(avatar)
                 .flatMap(ImageUploadService::get)
                 .map(img  -> ResponseEntity.ok()
                         .contentType(MediaType.IMAGE_PNG)
@@ -83,11 +95,13 @@ public class UserController {
                 .orElse(ResponseEntity.ok(null));
     }
 
-    @PostMapping("/image")
-    public ResponseEntity<MessageResponse> uploadImageToUser(@RequestParam MultipartFile file,
-                                                             Principal principal) {
+    @PutMapping("/image")
+    public ResponseEntity<MessageResponse> uploadImage(@RequestParam MultipartFile file,
+                                            Principal principal){
         userService.uploadAvatar(file, principal);
-        return ResponseEntity.ok(new  MessageResponse("Image uploaded successfully"));
+        return ResponseEntity.ok(new MessageResponse("Message uploaded successfully"));
     }
+
+
 
 }

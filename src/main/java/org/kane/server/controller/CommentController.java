@@ -1,10 +1,10 @@
 package org.kane.server.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kane.server.DTO.CommentCreateDTO;
-import org.kane.server.DTO.CommentShowDTO;
+import org.kane.server.DTO.comment.CommentCreateDTO;
+import org.kane.server.DTO.comment.CommentShowDTO;
 import org.kane.server.DTO.response.MessageResponse;
-import org.kane.server.mappers.CommentCreateMapper;
+import org.kane.server.mappers.comment.CommentCreateMapper;
 import org.kane.server.services.CommentService;
 import org.kane.server.validations.annotations.ResponseErrorValidation;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +32,7 @@ public class CommentController {
                                                 Principal principal) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(result);
         if(!ObjectUtils.isEmpty(errors)) return errors;
-        var comment = Optional.of(commentService
-                        .saveComment(commentDTO, principal));
+        var comment = commentService.saveComment(commentDTO, principal);
         return ResponseEntity.ok(comment);
     }
 

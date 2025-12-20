@@ -1,11 +1,13 @@
 package org.kane.server.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kane.server.DTO.request.LoginRequest;
 import org.kane.server.DTO.request.SignupRequest;
+import org.kane.server.DTO.response.JWTTokenSuccessResponse;
 import org.kane.server.DTO.response.MessageResponse;
 import org.kane.server.services.CustomUserDetailsService;
 import org.kane.server.services.TokenService;
@@ -46,8 +48,9 @@ public class AuthController {
             return ResponseEntity.ok(tokenResp);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new MessageResponse("Error: Invalid username or password"));
+                    .body(new JWTTokenSuccessResponse(false, "Token is expired"));
         }
+
     }
 
     @PostMapping("/signup")

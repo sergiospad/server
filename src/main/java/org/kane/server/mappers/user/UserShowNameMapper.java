@@ -13,7 +13,7 @@ public class UserShowNameMapper implements Mapper<User, UserShowNameDTO> {
     @Override
     public UserShowNameDTO map(User from) {
         return UserShowNameDTO.builder()
-                .userId(from.getId())
+                .id(from.getId())
                 .username(from.getUsername())
                 .firstname(from.getFirstname())
                 .lastname(from.getLastname())

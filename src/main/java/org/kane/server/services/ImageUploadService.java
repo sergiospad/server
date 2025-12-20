@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,8 +39,8 @@ public class ImageUploadService {
     }
 
     @SneakyThrows
-    public static void delete(String imagePath, long id, String prefix) {
-        Files.delete(getImagePath(imagePath, id, prefix));
+    public static void delete(String imagePath) {
+        Files.delete(Path.of(BUCKET,imagePath));
     }
 
     @SneakyThrows

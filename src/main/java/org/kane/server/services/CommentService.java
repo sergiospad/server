@@ -2,13 +2,13 @@ package org.kane.server.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kane.server.DTO.CommentCreateDTO;
-import org.kane.server.DTO.CommentShowDTO;
+import org.kane.server.DTO.comment.CommentCreateDTO;
+import org.kane.server.DTO.comment.CommentShowDTO;
 import org.kane.server.entity.Comment;
 import org.kane.server.entity.Post;
 import org.kane.server.entity.User;
 import org.kane.server.exceptions.PostNotFoundException;
-import org.kane.server.mappers.CommentShowMapper;
+import org.kane.server.mappers.comment.CommentShowMapper;
 import org.kane.server.repository.CommentRepository;
 import org.kane.server.repository.PostRepository;
 import org.kane.server.repository.UserRepository;

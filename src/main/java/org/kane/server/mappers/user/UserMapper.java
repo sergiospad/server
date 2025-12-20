@@ -18,7 +18,6 @@ public class UserMapper implements Mapper<UserEditDTO, User> {
                 .firstname(from.getFirstname())
                 .lastname(from.getLastname())
                 .bio(from.getBio())
-                .avatar(from.getImageURL())
                 .build();
     }
 

@@ -2,8 +2,8 @@ package org.kane.server.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kane.server.DTO.PostCreateDTO;
-import org.kane.server.DTO.PostShowDTO;
+import org.kane.server.DTO.post.PostCreateDTO;
+import org.kane.server.DTO.post.PostShowDTO;
 import org.kane.server.entity.ImageModel;
 import org.kane.server.entity.Post;
 import org.kane.server.entity.User;

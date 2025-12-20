@@ -14,17 +14,13 @@ public class UserProfileMapper implements Mapper<User, UserProfileDTO> {
 
     @Override
     public UserProfileDTO map(User from) {
-        var postsId = from.getPosts().stream()
-                .map(Post::getId)
-                .toList();
         return UserProfileDTO.builder()
                 .id(from.getId())
                 .username(from.getUsername())
                 .bio(from.getBio())
                 .email(from.getEmail())
-                .firstName(from.getFirstname())
-                .lastName(from.getLastname())
-                .posts(postsId)
+                .firstname(from.getFirstname())
+                .lastname(from.getLastname())
                 .build();
     }
 }

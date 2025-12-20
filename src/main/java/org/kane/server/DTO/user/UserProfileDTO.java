@@ -15,8 +15,7 @@ public class UserProfileDTO {
     Long id;
     String username;
     String email;
-    String firstName;
-    String lastName;
+    String firstname;
+    String lastname;
     String bio;
-    List<Long> posts;
 }

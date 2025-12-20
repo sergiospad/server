@@ -1,5 +1,6 @@
 package org.kane.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -45,6 +46,7 @@ public class Post {
     private List<Comment> comments = new ArrayList<>();
 
     @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private LocalDateTime createdDate;
 
     @PrePersist
@@ -67,7 +69,7 @@ public class Post {
             orphanRemoval = true
     )
     @Builder.Default
-    private List<ImageModel> images = new ArrayList<>();
+    private Set<ImageModel> images = new HashSet<>();
 
     public void addImage(ImageModel imageModel){
         images.add(imageModel);

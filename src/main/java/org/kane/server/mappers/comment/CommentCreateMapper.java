@@ -1,8 +1,9 @@
-package org.kane.server.mappers;
+package org.kane.server.mappers.comment;
 
 import lombok.RequiredArgsConstructor;
-import org.kane.server.DTO.CommentCreateDTO;
+import org.kane.server.DTO.comment.CommentCreateDTO;
 import org.kane.server.entity.Comment;
+import org.kane.server.mappers.Mapper;
 import org.springframework.stereotype.Component;
 
 @Component

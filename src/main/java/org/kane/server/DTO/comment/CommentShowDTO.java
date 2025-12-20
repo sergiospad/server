@@ -1,4 +1,4 @@
-package org.kane.server.DTO;
+package org.kane.server.DTO.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommentShowDTO {
     Long id;
+    Long postId;
+    Long commentatorId;
     String username;
     String lastname;
     String firstname;

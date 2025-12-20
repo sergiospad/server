@@ -10,10 +10,10 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
-    @Query(nativeQuery = true, value = "SELECT id FROM post WHERE user_id=:id")
+    @Query(nativeQuery = true, value = "SELECT id FROM post WHERE user_id=:id ORDER BY created_date DESC ")
     List<Long> findAllByUser(Long id);
 
-    @Query(nativeQuery = true, value = "SELECT id FROM post")
+    @Query(nativeQuery = true, value = "SELECT id FROM post ORDER BY created_date DESC")
     List<Long> findAllIdPosts();
 
 }

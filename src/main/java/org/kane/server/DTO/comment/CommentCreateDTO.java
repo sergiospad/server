@@ -1,4 +1,4 @@
-package org.kane.server.DTO;
+package org.kane.server.DTO.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

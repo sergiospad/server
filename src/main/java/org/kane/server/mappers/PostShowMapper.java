@@ -1,8 +1,7 @@
 package org.kane.server.mappers;
 
 import lombok.RequiredArgsConstructor;
-import org.kane.server.DTO.PostShowDTO;
-import org.kane.server.entity.Comment;
+import org.kane.server.DTO.post.PostShowDTO;
 import org.kane.server.entity.ImageModel;
 import org.kane.server.entity.Post;
 import org.kane.server.entity.User;
@@ -25,6 +24,8 @@ public class PostShowMapper implements Mapper<Post, PostShowDTO>{
                 .caption(from.getCaption())
                 .location(from.getLocation())
                 .author(from.getUser().getId())
+                .authorFirstname(from.getUser().getFirstname())
+                .authorLastname(from.getUser().getLastname())
                 .createdDate(from.getCreatedDate())
                 .likedUsers(likedUsers)
                 .images(img)

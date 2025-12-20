@@ -19,7 +19,10 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
         InvalidLoginResponse invalidLoginResponse = new InvalidLoginResponse();
         response.setContentType(SecurityConstants.CONTENT_TYPE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
+
         response.getWriter().println(invalidLoginResponse);
     }
+
+
 }
 

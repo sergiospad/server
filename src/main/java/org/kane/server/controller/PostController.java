@@ -2,8 +2,8 @@ package org.kane.server.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.kane.server.DTO.PostCreateDTO;
-import org.kane.server.DTO.PostShowDTO;
+import org.kane.server.DTO.post.PostCreateDTO;
+import org.kane.server.DTO.post.PostShowDTO;
 import org.kane.server.DTO.response.MessageResponse;
 import org.kane.server.entity.ImageModel;
 import org.kane.server.exceptions.PostNotFoundException;
@@ -14,7 +14,6 @@ import org.kane.server.services.UserService;
 import org.kane.server.validations.annotations.ResponseErrorValidation;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +62,7 @@ public class PostController {
     }
 
     @GetMapping("/image/{imageId}")
-    public ResponseEntity<byte[]> getUserImage(@PathVariable Long imageId, Principal principal ){
+    public ResponseEntity<byte[]> getPostImage(@PathVariable Long imageId, Principal principal ){
         return postService.getImageOfPost(imageId)
                 .map(ImageModel::getImageURL)
                 .flatMap(ImageUploadService::get)
@@ -85,6 +84,13 @@ public class PostController {
     public ResponseEntity<MessageResponse> deletePost(@PathVariable Long postId, Principal principal) {
         postService.deletePost(postId, principal);
         return ResponseEntity.ok(new MessageResponse("Post deleted"));
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostShowDTO> getPostById(@PathVariable Long postId, Principal principal){
+        var post = postService.getPostById(postId)
+                .orElseThrow(()->new PostNotFoundException("Post not found"));
+        return ResponseEntity.ok(post);
     }
 
 }

@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS post
 CREATE TABLE IF NOT EXISTS image_model
 (
     id BIGSERIAL PRIMARY KEY ,
-    imageURL VARCHAR(128),
+    imageURL VARCHAR(128) UNIQUE,
     post_id BIGINT
 );
 

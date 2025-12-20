@@ -24,6 +24,8 @@ import static org.kane.server.services.ImageUploadService.*;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+    private static final String DEFAULT_AVATAR = "user/default/307ce493-b254-4b2d-8ba4-d12c080d6651.png";
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -66,10 +68,9 @@ public class UserService {
     public void uploadAvatar(MultipartFile file, Principal principal) {
         User user = userRepository.getUserByPrincipal(principal);
         var pref = ImagePrefix.USER.toString();
-        if (!ObjectUtils.isEmpty(user.getAvatar()))
-            delete(user.getAvatar(),
-                    user.getId(),
-                   pref);
+        if (!ObjectUtils.isEmpty(user.getAvatar())) {
+            delete(user.getAvatar());
+        }
         var imgPath = saveImage(file, user.getId(), pref);
         user.setAvatar(imgPath);
         userRepository.save(user);
@@ -77,6 +78,14 @@ public class UserService {
 
     public Optional<String> getAvatar(Principal principal){
         return Optional.of(userRepository.getUserByPrincipal(principal).getAvatar());
+    }
+
+    public Optional<String> getAvatarByUserId(Long userId){
+        return userRepository.getUserById(userId).map(User::getAvatar);
+    }
+
+    public String getDefaultAvatar() {
+        return DEFAULT_AVATAR;
     }
 
 }
