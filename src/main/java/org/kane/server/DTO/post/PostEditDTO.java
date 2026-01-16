@@ -1,20 +1,17 @@
-package org.kane.server.DTO.user;
+package org.kane.server.DTO.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileDTO {
+public class PostEditDTO {
     Long id;
-    String username;
-    String email;
-    String firstname;
-    String lastname;
-    String bio;
+    String title;
+    String caption;
+    String location;
 }

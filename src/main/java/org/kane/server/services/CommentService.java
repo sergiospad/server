@@ -3,11 +3,13 @@ package org.kane.server.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kane.server.DTO.comment.CommentCreateDTO;
+import org.kane.server.DTO.comment.CommentEditDTO;
 import org.kane.server.DTO.comment.CommentShowDTO;
 import org.kane.server.entity.Comment;
 import org.kane.server.entity.Post;
 import org.kane.server.entity.User;
 import org.kane.server.exceptions.PostNotFoundException;
+import org.kane.server.mappers.comment.CommentEditMapper;
 import org.kane.server.mappers.comment.CommentShowMapper;
 import org.kane.server.repository.CommentRepository;
 import org.kane.server.repository.PostRepository;
@@ -28,6 +30,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentShowMapper commentShowMapper;
+    private final CommentEditMapper commentEditMapper;
 
     @Transactional
     public CommentShowDTO saveComment(CommentCreateDTO commentDTO, Principal principal) {
@@ -61,5 +64,13 @@ public class CommentService {
         commentRepository.findById(commentId)
                 .ifPresent(commentRepository::delete);
 
+    }
+
+    @Transactional
+    public CommentShowDTO editComment(CommentEditDTO commentDTO){
+        var comment = commentRepository.findCommentById(commentDTO.getId());
+        comment = commentEditMapper.map(commentDTO, comment);
+        comment = commentRepository.save(comment);
+        return commentShowMapper.map(comment);
     }
 }

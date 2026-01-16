@@ -17,7 +17,6 @@ public class UserShowNameMapper implements Mapper<User, UserShowNameDTO> {
                 .username(from.getUsername())
                 .firstname(from.getFirstname())
                 .lastname(from.getLastname())
-                .lastname(from.getLastname())
                 .build();
     }
 }

@@ -3,12 +3,14 @@ package org.kane.server.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kane.server.DTO.post.PostCreateDTO;
+import org.kane.server.DTO.post.PostEditDTO;
 import org.kane.server.DTO.post.PostShowDTO;
 import org.kane.server.entity.ImageModel;
 import org.kane.server.entity.Post;
 import org.kane.server.entity.User;
 import org.kane.server.exceptions.PostNotFoundException;
-import org.kane.server.mappers.PostShowMapper;
+import org.kane.server.mappers.post.PostEditMapper;
+import org.kane.server.mappers.post.PostShowMapper;
 import org.kane.server.repository.ImageRepository;
 import org.kane.server.repository.PostRepository;
 import org.kane.server.repository.UserRepository;
@@ -32,7 +34,8 @@ public class PostService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
-    private final PostShowMapper postMapper;
+    private final PostShowMapper postShowMapper;
+    private final PostEditMapper postEditMapper;
 
     @Transactional
     public PostShowDTO createPost(PostCreateDTO postDTO, Principal principal){
@@ -45,7 +48,7 @@ public class PostService {
         user.addPost(post);
         post = postRepository.save(post);
         log.info("Post created for user {}", user.getUsername());
-        return Optional.of(post).map(postMapper::map).orElse(null);
+        return Optional.of(post).map(postShowMapper::map).orElse(null);
     }
 
     public List<Long> getAllPosts(){
@@ -53,7 +56,7 @@ public class PostService {
     }
 
     public Optional<PostShowDTO> getPostById(Long id){
-        return postRepository.findById(id).map(postMapper::map);
+        return postRepository.findById(id).map(postShowMapper::map);
     }
 
     public List<Long> getPostsByCurrentUser(Principal principal){
@@ -116,5 +119,15 @@ public class PostService {
 
     public Optional<ImageModel> getImageOfPost(Long postId){
         return imageRepository.findById(postId);
+    }
+
+    @Transactional
+    public PostShowDTO editPost(PostEditDTO postDTO){
+        Post post = postRepository.findById(postDTO.getId())
+                .map(p-> postEditMapper.map(postDTO, p))
+                .orElseThrow(()->new PostNotFoundException("Post cannot be found"));
+        post = postRepository.save(post);
+        log.info("Post edited. PostId: {}", post.getId());
+        return postShowMapper.map(post);
     }
 }

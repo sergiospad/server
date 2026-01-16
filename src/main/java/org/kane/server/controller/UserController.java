@@ -101,7 +101,4 @@ public class UserController {
         userService.uploadAvatar(file, principal);
         return ResponseEntity.ok(new MessageResponse("Message uploaded successfully"));
     }
-
-
-
 }

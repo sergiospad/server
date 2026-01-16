@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users
     email VARCHAR(64) UNIQUE,
     bio TEXT,
     avatar VARCHAR(128),
-    password VARCHAR(3000),
+    password TEXT,
     created_date DATE
 );
 
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS post
 (
     id BIGSERIAL PRIMARY KEY ,
     title VARCHAR(64),
-    caption VARCHAR(64),
+    caption TEXT,
     location VARCHAR(64),
     user_id BIGINT REFERENCES users ON DELETE CASCADE,
     created_date DATE

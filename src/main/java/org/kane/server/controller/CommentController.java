@@ -2,6 +2,7 @@ package org.kane.server.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.kane.server.DTO.comment.CommentCreateDTO;
+import org.kane.server.DTO.comment.CommentEditDTO;
 import org.kane.server.DTO.comment.CommentShowDTO;
 import org.kane.server.DTO.response.MessageResponse;
 import org.kane.server.mappers.comment.CommentCreateMapper;
@@ -46,5 +47,11 @@ public class CommentController {
     public ResponseEntity<MessageResponse> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok(new  MessageResponse("Comment deleted successfully"));
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<CommentShowDTO> editComment(@RequestBody CommentEditDTO commentDTO) {
+        var comment = commentService.editComment(commentDTO);
+        return ResponseEntity.ok(comment);
     }
 }

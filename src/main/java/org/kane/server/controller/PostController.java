@@ -3,11 +3,12 @@ package org.kane.server.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.kane.server.DTO.post.PostCreateDTO;
+import org.kane.server.DTO.post.PostEditDTO;
 import org.kane.server.DTO.post.PostShowDTO;
 import org.kane.server.DTO.response.MessageResponse;
 import org.kane.server.entity.ImageModel;
 import org.kane.server.exceptions.PostNotFoundException;
-import org.kane.server.mappers.PostShowMapper;
+import org.kane.server.mappers.post.PostShowMapper;
 import org.kane.server.services.ImageUploadService;
 import org.kane.server.services.PostService;
 import org.kane.server.services.UserService;
@@ -92,5 +93,13 @@ public class PostController {
                 .orElseThrow(()->new PostNotFoundException("Post not found"));
         return ResponseEntity.ok(post);
     }
+
+    @PutMapping("/edit")
+    public ResponseEntity<PostShowDTO> editPost(@RequestBody PostEditDTO postDTO){
+        var post = postService.editPost(postDTO);
+        return ResponseEntity.ok(post);
+    }
+
+
 
 }

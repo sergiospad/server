@@ -1,15 +1,16 @@
-package org.kane.server.mappers;
+package org.kane.server.mappers.post;
 
 import lombok.RequiredArgsConstructor;
 import org.kane.server.DTO.post.PostShowDTO;
 import org.kane.server.entity.ImageModel;
 import org.kane.server.entity.Post;
 import org.kane.server.entity.User;
+import org.kane.server.mappers.Mapper;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PostShowMapper implements Mapper<Post, PostShowDTO>{
+public class PostShowMapper implements Mapper<Post, PostShowDTO> {
     @Override
     public PostShowDTO map(Post from) {
         var img = from.getImages().stream()
