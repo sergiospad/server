@@ -18,7 +18,6 @@ public class CommentEditMapper implements Mapper<CommentEditDTO, Comment> {
     }
 
     public Comment map(CommentEditDTO from, Comment to) {
-        to.setId(from.getId());
         to.setMessage(from.getMessage());
         return to;
     }
